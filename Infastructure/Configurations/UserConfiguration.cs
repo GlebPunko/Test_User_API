@@ -15,7 +15,7 @@ namespace Infastructure.Configurations
 
             builder.Property(x => x.Name).HasMaxLength(30).IsRequired();
 
-            builder.Property(x => x.Password).HasMaxLength(50).IsRequired();
+            builder.Property(x => x.Password).HasMaxLength(256).IsRequired();
 
             builder.Property(x => x.LastName).HasMaxLength(50).IsRequired();
 
