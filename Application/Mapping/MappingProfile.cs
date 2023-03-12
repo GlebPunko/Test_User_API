@@ -8,9 +8,12 @@ namespace Application.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<Register, User>().ReverseMap();
+            CreateMap<Register, User>()
+                .ForPath(r => r.Email, act => act.MapFrom(x => new Email { EmailAddress = x.Email, Malling = x.IsMailing }))
+                .ReverseMap();
             CreateMap<Register, Login>()
                 .ForMember(dest => dest.LoginUser, act => act.MapFrom(x => x.Login));
+            CreateMap<User, Response>();
         }
     }
 }

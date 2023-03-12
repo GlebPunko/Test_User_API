@@ -12,6 +12,7 @@ namespace Infastructure.DI
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddScoped<IUserControlService, UserControlService>();
+            services.AddScoped<IJwtService, JwtService>();
 
             return services;
         }

@@ -11,14 +11,16 @@ namespace Application.Services
     {
         private readonly IUserControlRepository _userControlRepository;
         private readonly IMapper _mapper;
+        private readonly IJwtService _jwtService;
 
-        public UserControlService(IUserControlRepository userControlRepository, IMapper mapper)
+        public UserControlService(IUserControlRepository userControlRepository, IMapper mapper, IJwtService jwtService)
         {
             _userControlRepository = userControlRepository;
             _mapper = mapper;
+            _jwtService = jwtService;
         }
 
-        public async Task<User> GetUserAsync(int id, CancellationToken cancellationToken)
+        public async Task<Response> GetUserAsync(int id, CancellationToken cancellationToken)
         {
             var user = await _userControlRepository.GetUserAsync(id, cancellationToken);  
 
@@ -27,7 +29,7 @@ namespace Application.Services
                 throw new ArgumentException(nameof(user));
             }
 
-            return user;
+            return _mapper.Map<Response>(user);
         }
 
         public async Task<string> LoginAsync(Login login, CancellationToken cancellationToken)
@@ -52,7 +54,7 @@ namespace Application.Services
                 throw new ArgumentException("Bad password or login!");
             }
 
-            return "token";
+            return _jwtService.GenerateToken(currentUser);
         }
 
         public async Task<Login> RegisterAsync(Register user, CancellationToken cancellationToken)

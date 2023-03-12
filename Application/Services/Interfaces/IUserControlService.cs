@@ -7,6 +7,6 @@ namespace Application.Services.Interfaces
     {
         Task<Login> RegisterAsync(Register user, CancellationToken cancellationToken);
         Task<string> LoginAsync(Login login, CancellationToken cancellationToken);
-        Task<User> GetUserAsync(int id, CancellationToken cancellationToken);
+        Task<Response> GetUserAsync(int id, CancellationToken cancellationToken);
     }
 }

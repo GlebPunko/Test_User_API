@@ -21,7 +21,7 @@ namespace Infastructure.Repositories
 
         public async Task<User> GetUserAsync(int id, CancellationToken cancellationToken)
         {
-            return await _context.Users.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            return await _context.Users.Include(u => u.Email).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
         public async Task<User> CreateUserAsync(User user, CancellationToken cancellationToken)

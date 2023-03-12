@@ -1,11 +1,10 @@
 ﻿using Application.Models;
+using Application.Services;
 using Application.Services.Interfaces;
 using Domain.Entities;
-using Infastructure.Context;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace API.Controllers
 {
@@ -40,9 +39,22 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getCurrentUser")]
-        public async Task<ActionResult<User>> GetUserAsync(int id, CancellationToken cancellationToken)
+        [Authorize]
+        public async Task<ActionResult<Response>> GetUserAsync(CancellationToken cancellationToken)
         {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type.Equals(JwtService.UserId));
+            
+            if (userIdClaim is null || !Int32.TryParse(userIdClaim.Value, out int id))
+            {
+                return Unauthorized();
+            }
+            
             var user = await _userInterface.GetUserAsync(id,cancellationToken);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
 
             return Ok(user);
         }
